@@ -33,7 +33,7 @@ class MCPProtocolSmokeTests(unittest.TestCase):
                     })
                     for tool in tools.tools:
                         self.assertTrue(tool.description)
-                        self.assertIn("type", tool.inputSchema)
+                        self.assertIn("type", tool.input_schema)
 
                     payload = (ROOT / "examples" / "n8n-broken.json").read_text(
                         encoding="utf-8"
@@ -41,16 +41,16 @@ class MCPProtocolSmokeTests(unittest.TestCase):
                     result = await session.call_tool("audit_workflow", arguments={
                         "platform": "n8n", "source": payload
                     })
-                    self.assertFalse(result.isError)
-                    output = result.structuredContent
+                    self.assertFalse(result.is_error)
+                    output = result.structured_content
                     if not output:
                         output = json.loads(result.content[0].text)
                     self.assertEqual(output["platform"], "n8n")
                     self.assertIn("N8N009", {f["rule"] for f in output["findings"]})
 
                     details = await session.call_tool("list_supported_platforms", arguments={})
-                    self.assertFalse(details.isError)
-                    catalog = details.structuredContent
+                    self.assertFalse(details.is_error)
+                    catalog = details.structured_content
                     if not catalog:
                         catalog = json.loads(details.content[0].text)
                     self.assertIn("dify", catalog["native_adapters"])
@@ -58,12 +58,12 @@ class MCPProtocolSmokeTests(unittest.TestCase):
                     url = await session.call_tool("preflight_url", arguments={
                         "url": "http://127.0.0.1/admin"
                     })
-                    self.assertFalse(url.isError)
-                    answer = url.structuredContent
+                    self.assertFalse(url.is_error)
+                    answer = url.structured_content
                     if not answer:
                         answer = json.loads(url.content[0].text)
                     self.assertEqual(answer["decision"], "block")
-        asyncio.run(check())
+        asyncio.run(asyncio.wait_for(check(), timeout=30))
 
 
 if __name__ == "__main__":
