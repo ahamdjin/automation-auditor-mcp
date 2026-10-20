@@ -1,0 +1,24 @@
+{
+  "name": "Broken",
+  "nodes": [
+    {
+      "id": "1",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "parameters": {}
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Deleted step",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

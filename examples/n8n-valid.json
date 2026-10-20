@@ -1,0 +1,33 @@
+{
+  "name": "Fictional lead intake",
+  "nodes": [
+    {
+      "id": "1",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "parameters": {
+        "path": "example-leads"
+      }
+    },
+    {
+      "id": "2",
+      "name": "Normalize",
+      "type": "n8n-nodes-base.set",
+      "parameters": {}
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Normalize",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false
+}

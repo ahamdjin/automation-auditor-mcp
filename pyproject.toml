@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=75", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "automation-auditor-mcp"
+version = "0.1.0"
+description = "Read-only multi-platform workflow and integration static auditor for MCP clients"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "Apache-2.0"
+authors = [{name = "Ahmad Yar"}]
+keywords = ["mcp","n8n","dify","trigger.dev","activepieces","workflows","automation","linting"]
+dependencies = [
+  "mcp>=2.0,<3",
+  "PyYAML>=6,<7",
+  "ahmad-yar-gpt-tools==0.3.1",
+]
+
+[project.urls]
+Homepage = "https://www.ahmadyar.co/"
+Source = "https://github.com/ahamdjin/automation-auditor-mcp"
+Issues = "https://github.com/ahamdjin/automation-auditor-mcp/issues"
+
+[project.scripts]
+automation-auditor-mcp = "automation_auditor_mcp.server:main"
+automation-audit = "automation_auditor_mcp.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

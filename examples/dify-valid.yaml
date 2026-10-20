@@ -1,0 +1,17 @@
+kind: app
+app:
+  name: Fictional lead triage
+  mode: workflow
+workflow:
+  graph:
+    nodes:
+      - id: start_1
+        data:
+          type: start
+      - id: end_1
+        data:
+          type: end
+    edges:
+      - id: edge_1
+        source: start_1
+        target: end_1

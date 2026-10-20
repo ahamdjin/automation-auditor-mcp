@@ -1,0 +1,15 @@
+{
+  "version": {
+    "trigger": {
+      "name": "trigger",
+      "type": "WEBHOOK",
+      "valid": true,
+      "nextAction": {
+        "name": "normalize_contact",
+        "type": "CODE",
+        "valid": true,
+        "nextAction": null
+      }
+    }
+  }
+}
