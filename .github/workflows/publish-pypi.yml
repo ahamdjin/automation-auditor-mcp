@@ -1,0 +1,70 @@
+name: Publish to PyPI (approved release only)
+
+# Requires the maintainer to configure a matching PyPI Trusted Publisher
+# at pypi.org before a release is created. No passwords/tokens in the repo.
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    if: startsWith(github.event.release.tag_name, 'v')
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install package and testing dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e . build twine
+      - name: Ensure tag and metadata versions match
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: |
+          python - <<'PY'
+          import os
+          import pathlib
+          import tomllib
+          import json
+          version = tomllib.loads(pathlib.Path("pyproject.toml").read_text())["project"]["version"]
+          meta = json.loads(pathlib.Path("server.json").read_text())
+          assert os.environ["RELEASE_TAG"] == f"v{version}", "Tag must match package version"
+          assert meta["version"] == version == meta["packages"][0]["version"]
+          assert meta["name"] == "io.github.ahamdjin/automation-auditor-mcp"
+          assert "<!-- mcp-name: io.github.ahamdjin/automation-auditor-mcp -->" in pathlib.Path("README.md").read_text()
+          PY
+      - name: Run all tests, including stdio MCP protocol
+        run: python -m unittest discover -s tests -v
+      - name: Build distributions
+        run: python -m build
+      - name: Check distributions
+        run: python -m twine check dist/*
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pypi-distributions
+          path: dist/
+          if-no-files-found: error
+
+  publish:
+    name: Trusted publish to PyPI
+    needs: verify
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/project/automation-auditor-mcp/
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: pypi-distributions
+          path: dist/
+      - name: Publish with PyPI OIDC trusted publishing
+        uses: pypa/gh-action-pypi-publish@release/v1

@@ -26,6 +26,26 @@ jobs:
           python -m compileall -q src
       - name: Run behavior checks
         run: python -m unittest discover -s tests -v
+      - name: Check registry and package metadata agree
+        run: |
+          python - <<'PY'
+          import json
+          import pathlib
+          import tomllib
+          package = tomllib.loads(pathlib.Path("pyproject.toml").read_text())["project"]
+          registry = json.loads(pathlib.Path("server.json").read_text())
+          expected = "io.github.ahamdjin/automation-auditor-mcp"
+          assert registry["name"] == expected
+          assert package["name"] == registry["packages"][0]["identifier"]
+          assert package["version"] == registry["version"] == registry["packages"][0]["version"]
+          assert f"<!-- mcp-name: {expected} -->" in pathlib.Path("README.md").read_text()
+          assert registry["packages"][0]["transport"]["type"] == "stdio"
+          PY
+      - name: Verify installable wheel and source distribution
+        run: |
+          python -m pip install build twine
+          python -m build
+          python -m twine check dist/*
       - name: Verify runtime imports
         run: |
           python -c "from automation_auditor_mcp.server import mcp; print('MCP SDK v2 server imports')"
