@@ -1,0 +1,24 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.ahamdjin/automation-auditor-mcp",
+  "title": "Automation Auditor MCP",
+  "description": "Inspect n8n, Dify, Trigger.dev and Activepieces automation exports before deployment.",
+  "websiteUrl": "https://www.ahmadyar.co/",
+  "repository": {
+    "url": "https://github.com/ahamdjin/automation-auditor-mcp",
+    "source": "github"
+  },
+  "version": "0.1.0",
+  "packages": [
+    {
+      "registryType": "pypi",
+      "registryBaseUrl": "https://pypi.org",
+      "identifier": "automation-auditor-mcp",
+      "version": "0.1.0",
+      "runtimeHint": "uvx",
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ]
+}
