@@ -4,7 +4,7 @@
 
 <!-- mcp-name: io.github.ahamdjin/automation-auditor-mcp -->
 
-This project is a **starter implementation**. It has not been published to PyPI or registered in the MCP Registry, and its MCP transport has not yet been end-to-end tested against a host. It performs read-only static checks on supplied text; it never reads your repo on its own, contacts automation accounts, runs JS, or connects to API endpoints.
+This is an early-stage implementation. See the [PyPI package](https://pypi.org/project/automation-auditor-mcp/) and [MCP Registry entry](https://registry.modelcontextprotocol.io/?q=io.github.ahamdjin%2Fautomation-auditor-mcp) for current publishing and version details. Host compatibility and real-client MCP behavior should be verified before production use. It performs read-only static checks on supplied text; it never reads your repo on its own, contacts automation accounts, runs JS, or connects to API endpoints.
 
 ## Supported inputs and honest limitations
 
@@ -19,7 +19,7 @@ This project is a **starter implementation**. It has not been published to PyPI 
 
 **"Any automation platform" is not possible without an adapter for its native format.** Unsupported platforms are reported as unsupported, rather than passing a meaningless check. You can add adapters to the registry in `core.py` and corresponding tests. Make, Zapier and Pipedream are not advertised as supported in v0.1.
 
-## Install locally (after publishing to PyPI)
+## Install
 
 Install with Python 3.11+:
 
@@ -38,7 +38,7 @@ Configure a compatible MCP client:
 }
 ```
 
-`uvx` requires `uv`. The package and command are **not published yet**, so this configuration is illustrative until the PyPI release succeeds.
+`uvx` requires `uv`. Confirm the package's current published version on PyPI and test the configuration with your MCP host before production use.
 
 For development from source:
 
@@ -68,14 +68,14 @@ The MCP client passes exported workflow JSON to `audit_workflow("n8n", source)`.
 
 Test fixtures use only fictional metadata; no API keys or customer information. The core format inspectors require no network and do not import MCP at test time; MCP SDK integration requires installing dependencies.
 
-## Publishing checklist (do not publish before live testing)
+## Release and registry maintenance checklist
 
-1. Create public GitHub repo `ahamdjin/automation-auditor-mcp` and push these sources.
-2. Run all tests and check MCP Inspector tool calls in a real MCP client. Improve Trigger.dev analysis with a TypeScript AST parser before describing it as comprehensive.
-3. Build and release a distribution on [PyPI](https://pypi.org/). For trusted publishing, configure your PyPI publisher correctly; package publishing requires a separate approval/credentials step.
+1. Keep the public source repository and installation instructions synchronized with released artifacts.
+2. Run all tests and verify MCP Inspector calls in a real MCP client for each release. Improve Trigger.dev analysis with a TypeScript AST parser before describing it as comprehensive.
+3. For each release, verify the published version and metadata on [PyPI](https://pypi.org/project/automation-auditor-mcp/), including its source and homepage links.
 4. Preserve the README marker `mcp-name: io.github.ahamdjin/automation-auditor-mcp` **inside the PyPI long description** for Registry package ownership verification.
-5. Generate and validate `server.json` using the [official MCP Registry publisher](https://github.com/modelcontextprotocol/registry); set the PyPI package identifier/version and stdio transport. Log in using GitHub, then publish.
-6. Verify the listing by querying the official Registry API. The Registry hosts metadata, not your package.
+5. When releasing a new version, validate `server.json` using the [official MCP Registry publisher](https://github.com/modelcontextprotocol/registry), and keep its PyPI identifier, version and stdio transport accurate.
+6. Verify Registry metadata after each release using the official Registry API. The Registry hosts metadata, not the package itself.
 
 The Registry's [official publishing requirements](https://github.com/modelcontextprotocol/registry/blob/main/docs/modelcontextprotocol-io/package-types.mdx) explain PyPI ownership verification.
 
